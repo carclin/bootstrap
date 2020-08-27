@@ -11,6 +11,8 @@ class CarClin
 	public static function create(bool $useAuth = true): App
 	{
 		$app = AppFactory::create();
+		if (defined('PATH') and PATH and PATH !== '/')
+			$app->setBasePath(PATH);
 
 		$app->addRoutingMiddleware();
 
