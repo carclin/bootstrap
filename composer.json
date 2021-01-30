@@ -4,7 +4,8 @@
     "require": {
         "slim/slim": "^4.5",
         "slim/psr7": "^1.2",
-        "vlucas/valitron": "^1.4"
+        "vlucas/valitron": "^1.4",
+        "aldarien/root": "^1.0"
     },
     "autoload": {
         "psr-4": {
