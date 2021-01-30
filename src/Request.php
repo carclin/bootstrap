@@ -1,4 +1,4 @@
-<?php namespace Travio\Common;
+<?php namespace CarClin\Common;
 
 use Proyect\Root\Root;
 
