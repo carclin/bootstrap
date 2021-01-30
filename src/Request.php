@@ -40,13 +40,11 @@ class Request
 
 			if ($options['json-request'])
 				$options['headers']['Content-Type'] = 'application/json';
-			if (defined('CLIENT_ID') and !isset($options['headers']['X-Client-Id']))
-				$options['headers']['X-Client-Id'] = CLIENT_ID;
 			if (defined('USER_ID') and !isset($options['headers']['X-User-Id']))
 				$options['headers']['X-User-Id'] = USER_ID;
 
 			// TODO attivare quando ci sarà l'autenticazione
-//			if ((isset($options['headers']['X-Client-Id']) or isset($options['headers']['X-User-Id'])) and $exploded_url[0] !== 'http://gateway-dealer/public')
+//			if (isset($options['headers']['X-User-Id']) and $exploded_url[0] !== 'http://gateway-dealer/public')
 //				$options['headers']['X-Gateway-Key'] = self::getGatewayKey();
 
 			$headers = [];
