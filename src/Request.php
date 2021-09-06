@@ -43,9 +43,8 @@ class Request
 			if (defined('USER_ID') and !isset($options['headers']['X-User-Id']))
 				$options['headers']['X-User-Id'] = USER_ID;
 
-			// TODO attivare quando ci sarà l'autenticazione
-//			if (isset($options['headers']['X-User-Id']) and $exploded_url[0] !== 'http://gateway-dealer/public')
-//				$options['headers']['X-Gateway-Key'] = self::getGatewayKey();
+			if (isset($options['headers']['X-User-Id']))
+				$options['headers']['X-Gateway-Key'] = self::getGatewayKey();
 
 			$headers = [];
 			foreach ($options['headers'] as $k => $v)
@@ -167,42 +166,14 @@ class Request
 	 */
 	private static function getGatewayKey(): string
 	{
-		if (self::$gatewayKey === null)
-			self::makeGatewayKey();
+		if (self::$gatewayKey === null) {
+			$gatewayKeyPath = Root::root() . '/gateway-key';
+			if (!file_exists($gatewayKeyPath))
+				throw new \Exception('Non trovo la gateway key, condividerla al service.');
 
-		return self::$gatewayKey;
-	}
-
-	/**
-	 * @throws \Exception
-	 */
-	private static function makeGatewayKey()
-	{
-		$publicKey = self::getPublicKey();
-
-		$publicGatewayKeyPath = Root::root() . '/gateway-key';
-		if (!file_exists($publicGatewayKeyPath))
-			throw new \Exception('Non trovo la gateway key, condividerla al service.');
-
-		$publicGatewayKey = file_get_contents($publicGatewayKeyPath);
-		openssl_public_encrypt($publicGatewayKey, $crypted, $publicKey, OPENSSL_PKCS1_OAEP_PADDING);
-
-		self::$gatewayKey = base64_encode($crypted);
-	}
-
-	/**
-	 * @return string
-	 */
-	public static function getPublicKey(): string
-	{
-		$publicKeyPath = Root::root() . '/public.pem';
-		if (file_exists($publicKeyPath)) {
-			$publicKey = file_get_contents($publicKeyPath);
-		} else {
-			$publicKey = self::get('http://gateway-dealer/public', ['json-response' => false]);
-			file_put_contents(Root::root() . '/public.pem', $publicKey);
+			self::$gatewayKey = file_get_contents($gatewayKeyPath);
 		}
 
-		return $publicKey;
+		return self::$gatewayKey;
 	}
 }
