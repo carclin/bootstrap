@@ -167,7 +167,7 @@ class Request
 	private static function getGatewayKey(): string
 	{
 		if (self::$gatewayKey === null) {
-			$gatewayKeyPath = Root::root() . '/gateway-key';
+			$gatewayKeyPath = Root::root() . '/keys/gateway';
 			if (!file_exists($gatewayKeyPath))
 				throw new \Exception('Non trovo la gateway key, condividerla al service.');
 
